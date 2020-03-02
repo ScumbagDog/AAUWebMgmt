@@ -5,19 +5,19 @@ namespace ITSWebMgmt.WebMgmtErrors
 {
     public class WebMgmtErrorList
     {
-        private List<WebMgmtError> errors;
-        private int[] ErrorCount = { 0, 0, 0 };
+        public List<WebMgmtError> Errors { get; private set; }
+        public int[] ErrorCount { get; private set; } = { 0, 0, 0 };
         public string ErrorMessages;
 
         public WebMgmtErrorList(List<WebMgmtError> errors)
         {
-            this.errors = errors;
+            this.Errors = errors;
             processErrors();
         }
 
         private void processErrors()
         {
-            foreach (WebMgmtError error in errors)
+            foreach (WebMgmtError error in Errors)
             {
                 if (error.HaveError())
                 {

@@ -1,0 +1,12 @@
+﻿@model ITSWebMgmt.WebMgmtErrors.WebMgmtErrorList
+
+<div>
+    <h4>WebMgmtErrorList</h4>
+    @foreach (var error in Model.Errors) // NB: Razor kan ikke finde ud af explicit typeinferens på abstrakte klasser, så er nødt til at deklarere errorsne som "var" i stedet for "WebMgmtError"
+    {
+        <div class="ui @error.Severeness.ToString().ToLower() message" runat="server">
+            <div class="header">@error.Heading</div>
+            <p>@error.Description</p>
+        </div>
+    }
+</div>
