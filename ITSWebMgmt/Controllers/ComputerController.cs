@@ -135,7 +135,7 @@ namespace ITSWebMgmt.Controllers
                     viewName = "Windows/Tasks";
                     break;
                 case "warnings":
-                    return PartialView("RawHTMLTab", new RawHTMLModel("Warnings", ComputerModel.ErrorMessages));
+                    return PartialView("WebMgmtErrors/Index", ComputerModel.ErrorList);
                 case "sccminfo":
                     viewName = "Windows/SCCMInfo";
                     ComputerModel.Windows.InitSCCMInfo();
@@ -434,6 +434,7 @@ namespace ITSWebMgmt.Controllers
         private void LoadWarnings(List<WebMgmtError> warnings)
         {
             var errorList = new WebMgmtErrorList(warnings);
+            ComputerModel.ErrorList = errorList;
             ComputerModel.ErrorCountMessage = errorList.getErrorCountMessage();
             ComputerModel.ErrorMessages = errorList.ErrorMessages;
         }

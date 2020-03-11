@@ -5,19 +5,32 @@ namespace ITSWebMgmt.WebMgmtErrors
 {
     public class WebMgmtErrorList
     {
-        public List<WebMgmtError> Errors { get; private set; }
+        public List<WebMgmtError> PossibleErrors { get; private set; }
+        //Blev træt af at skulle tjekke for HaveError i mine løkker, så nu er CurrentErrors en ting
+        public List<WebMgmtError> CurrentErrors {
+            get
+            {
+                return PossibleErrors.FindAll(x => x.HaveError());
+            }
+        }
+        public bool CurrentlyHasErrors { 
+            get
+            {
+                return CurrentErrors.Count != 0;
+            }
+        }
         public int[] ErrorCount { get; private set; } = { 0, 0, 0 };
         public string ErrorMessages;
 
         public WebMgmtErrorList(List<WebMgmtError> errors)
         {
-            this.Errors = errors;
+            this.PossibleErrors = errors;
             processErrors();
         }
 
         private void processErrors()
         {
-            foreach (WebMgmtError error in Errors)
+            foreach (WebMgmtError error in PossibleErrors)
             {
                 if (error.HaveError())
                 {
@@ -30,7 +43,6 @@ namespace ITSWebMgmt.WebMgmtErrors
                 ErrorMessages = "No warnings found";
             }
         }
-
         private string generateMessage(WebMgmtError error)
         {
             string messageType = "";

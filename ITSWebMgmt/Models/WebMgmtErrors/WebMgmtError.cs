@@ -7,7 +7,7 @@ using ITSWebMgmt.Models;
 
 namespace ITSWebMgmt.WebMgmtErrors
 {
-    public enum Severity { Error, Warning, Info}
+    public enum Severity { Error, Warning, Info, None}
 
     public abstract class WebMgmtError
     {

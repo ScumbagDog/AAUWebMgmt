@@ -253,6 +253,7 @@ namespace ITSWebMgmt.Controllers
             };
 
             var errorList = new WebMgmtErrorList(errors);
+            UserModel.ErrorList = errorList;
             UserModel.ErrorCountMessage = errorList.getErrorCountMessage();
             UserModel.ErrorMessages = errorList.ErrorMessages;
 
@@ -413,7 +414,7 @@ namespace ITSWebMgmt.Controllers
                     viewName = "Tasks";
                     break;
                 case "warnings":
-                    return PartialView("RawHTMLTab", new RawHTMLModel("Warnings", UserModel.ErrorMessages));
+                    return PartialView("WebMgmtErrors/Index", UserModel.ErrorList);
                 case "fileshares":
                     model = UserModel.InitFileshares();
                     return PartialView("ExchangeFileshare", model);
