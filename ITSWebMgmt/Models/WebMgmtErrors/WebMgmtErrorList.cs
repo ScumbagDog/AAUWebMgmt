@@ -1,4 +1,5 @@
 ﻿using ITSWebMgmt.Models;
+using System;
 using System.Collections.Generic;
 
 namespace ITSWebMgmt.WebMgmtErrors
@@ -21,13 +22,38 @@ namespace ITSWebMgmt.WebMgmtErrors
         }
         public int[] ErrorCount { get; private set; } = { 0, 0, 0 };
         public string ErrorMessages;
+        public Severity MostImportantCurrentSeverity
+        {
+            get
+            {
+                foreach(Severity s in Enum.GetValues(typeof(Severity)))
+                { //Iterer over hver værdi i enummen
+                    if (getSeverityCount(s) > 0)
+                    { //Hvis den givne enumværdi har en fejl, så returner den. Husk at løkken kører fra error til warning til info. 
+                        return s;
+                    }
+                }
+                return Severity.Info; //Dette burde ikke ske, men i tilfælde af at det gør, så vælg den mindst kritiske.
+            }
+        }
 
         public WebMgmtErrorList(List<WebMgmtError> errors)
         {
             this.PossibleErrors = errors;
             processErrors();
         }
-
+        public int getSeverityCount(Severity severityToCount)
+        {
+            int count = 0;
+            foreach (WebMgmtError error in CurrentErrors)
+            {
+                if (error.Severeness.Equals(severityToCount))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
         private void processErrors()
         {
             foreach (WebMgmtError error in PossibleErrors)
