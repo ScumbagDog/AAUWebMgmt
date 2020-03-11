@@ -254,8 +254,6 @@ namespace ITSWebMgmt.Controllers
 
             var errorList = new WebMgmtErrorList(errors);
             UserModel.ErrorList = errorList;
-            UserModel.ErrorCountMessage = errorList.getErrorCountMessage();
-            UserModel.ErrorMessages = errorList.ErrorMessages;
 
             if (userIsInRightOU())
             {

@@ -435,8 +435,6 @@ namespace ITSWebMgmt.Controllers
         {
             var errorList = new WebMgmtErrorList(warnings);
             ComputerModel.ErrorList = errorList;
-            ComputerModel.ErrorCountMessage = errorList.getErrorCountMessage();
-            ComputerModel.ErrorMessages = errorList.ErrorMessages;
         }
 
         public ActionResult AddToOneDrive([FromBody]string data)
