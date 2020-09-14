@@ -7,10 +7,18 @@
         <a data-tab="groups-all" class="item">Recursive</a>
     </div>
     <div class="ui active tab segment" data-tab="groups-direct">
-        @Html.Partial("TableView", Model.GroupTable)
+        @if (Model.GroupTable.Rows.Count == 4500)
+        {
+            <font color="red">Result have been limited to 4500 members. Some member is not shown!</font>
+        }
+        @await Html.PartialAsync("TableView", Model.GroupTable)
     </div>
     <div class="ui tab segment" data-tab="groups-all">
-        @Html.Partial("TableView", Model.GroupAllTable)
+        @if (Model.GroupAllTable.Rows.Count == 4500)
+        {
+            <font color="red">Result have been limited to 4500 members. Some member is not shown!</font>
+        }
+        @await Html.PartialAsync("TableView", Model.GroupAllTable)
     </div>
 </div>
 <script>

@@ -6,6 +6,8 @@ namespace ITSWebMgmt.WebMgmtErrors
 {
     public class WebMgmtErrorList
     {
+        public int[] ErrorCount { get; private set; } = { 0, 0, 0 };
+        public string ErrorMessages;
         public List<WebMgmtError> PossibleErrors { get; private set; }
         //Blev træt af at skulle tjekke for HaveError i mine løkker, så nu er CurrentErrors en ting
         public List<WebMgmtError> CurrentErrors {
@@ -20,8 +22,6 @@ namespace ITSWebMgmt.WebMgmtErrors
                 return CurrentErrors.Count != 0;
             }
         }
-        public int[] ErrorCount { get; private set; } = { 0, 0, 0 };
-        public string ErrorMessages;
         public Severity MostImportantCurrentSeverity
         {
             get

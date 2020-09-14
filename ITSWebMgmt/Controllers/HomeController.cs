@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.DirectoryServices;
 using ITSWebMgmt.Helpers;
 using ITSWebMgmt.Models.Log;
-using ITSWebMgmt.Connectors;
 using ITSWebMgmt.Models;
-using System;
 
 namespace ITSWebMgmt.Controllers
 {
@@ -55,15 +53,37 @@ namespace ITSWebMgmt.Controllers
             return View();
         }
 
-        public void Redirector(string adpath)
+        public void StopMaintenance()
         {
-            if (adpath != null)
+            if (Authentication.IsPlatform(HttpContext.User.Identity.Name))
             {
-                if (!adpath.StartsWith("LDAP://"))
+                MaintenanceHelper.IsDownForMaintenance = false;
+                Response.Redirect("/");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult StartMaintenance([FromBody] string message)
+        {
+            if (Authentication.IsPlatform(HttpContext.User.Identity.Name))
+            {
+                MaintenanceHelper.IsDownForMaintenance = true;
+                MaintenanceHelper.Message = message;
+                return Success("WebMgmt is now down for maintenance");
+            }
+
+            return Error("You do no have access to do this");
+        }
+
+        public void Redirector(string ADPath)
+        {
+            if (ADPath != null)
+            {
+                if (!ADPath.StartsWith("LDAP://"))
                 {
-                    adpath = "LDAP://" + adpath;
+                    ADPath = "LDAP://" + ADPath;
                 }
-                DirectoryEntry de = DirectoryEntryCreator.CreateNewDirectoryEntry(adpath);
+                DirectoryEntry de = DirectoryEntryCreator.CreateNewDirectoryEntry(ADPath);
 
                 var type = de.SchemaEntry.Name;
 
@@ -74,7 +94,7 @@ namespace ITSWebMgmt.Controllers
                 }
                 else if (type.Equals("computer"))
                 {
-                    var ldapSplit = adpath.Replace("LDAP://", "").Split(',');
+                    var ldapSplit = ADPath.Replace("LDAP://", "").Split(',');
                     var name = ldapSplit[0].Replace("CN=", "");
                     var domain = ldapSplit.Where<string>(s => s.StartsWith("DC=")).ToArray<string>()[0].Replace("DC=", "");
 
@@ -83,7 +103,7 @@ namespace ITSWebMgmt.Controllers
                 }
                 else if (type.Equals("group"))
                 {
-                    string param = "?" + "grouppath=" + adpath;
+                    string param = "?" + "grouppath=" + ADPath;
                     Response.Redirect("/Group" + param);
                 }
             }

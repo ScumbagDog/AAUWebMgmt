@@ -33,6 +33,7 @@
                 <a class="item" asp-area="" asp-controller="User" asp-action="Index">User Info</a><br />
                 <a class="item" asp-area="" asp-controller="Computer" asp-action="Index">Computer Info</a><br />
                 <a class="item" asp-area="" asp-controller="Log" asp-action="Index">Log (Only for platform)</a><br />
+                <a class="item" asp-area="" asp-controller="ComputerList" asp-action="Index">Computer list (Only for platform)</a><br />
                 <a class="item" asp-area="" asp-controller="KnownIssues" asp-action="Index">Manage known issues (Only for platform)</a><br />
                 <a class="item" asp-area="" asp-controller="MissingGroups" asp-action="Index">Manage Mac error groups (Only for platform)</a><br />
                 <a class="item" asp-area="" asp-controller="CSV" asp-action="Index">CSV to email converter</a><br />
@@ -49,14 +50,14 @@
                 {
                     if (entry.Type == ITSWebMgmt.Models.Log.LogEntryType.ComputerLookup)
                     {
-                        string adpath = entry.Arguments[0].Value;
-                        int from = adpath.IndexOf("CN=") + "CN=".Length;
-                        int to = adpath.IndexOf(',', from);
-                        string name = adpath;
+                        string ADPath = entry.Arguments[0].Value;
+                        int from = ADPath.IndexOf("CN=") + "CN=".Length;
+                        int to = ADPath.IndexOf(',', from);
+                        string name = ADPath;
 
                         if (to > 0 && to - from > 0)
                         {
-                            name = adpath.Substring(from, to - from);
+                            name = ADPath.Substring(from, to - from);
                         }
                         <a href="@("/Computer?computername=" + name)">@name</a>
                     }

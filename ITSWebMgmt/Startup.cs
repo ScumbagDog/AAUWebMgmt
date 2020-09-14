@@ -1,14 +1,14 @@
 using ITSWebMgmt.Helpers;
-using ITSWebMgmt.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using ITSWebMgmt.Models.Log;
+using System.Threading;
+using Microsoft.Extensions.Hosting;
 
 namespace ITSWebMgmt
 {
@@ -34,14 +34,14 @@ namespace ITSWebMgmt
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc();
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
             var connection = Configuration.GetConnectionString("MyConnectionString");
             services.AddDbContext<LogEntryContext>(options => options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -71,6 +71,12 @@ namespace ITSWebMgmt
                 endpoints.MapControllerRoute("createworkitem", "{controller=CreateWorkItem}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("aauredirector", "{controller=AAURedirector}/{action=Index}/{id?}");
             });
+
+            // Continue on list if stopped when new version is published
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                ComputerListModel.ContinueIfStopped();
+            }, null);
         }
     }
 }

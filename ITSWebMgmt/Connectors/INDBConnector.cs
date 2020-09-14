@@ -1,10 +1,8 @@
-﻿using ITSWebMgmt.Helpers;
-using ITSWebMgmt.Models;
+﻿using ITSWebMgmt.Models;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.DirectoryServices;
 using System.Text;
 
@@ -12,9 +10,14 @@ namespace ITSWebMgmt.Connectors
 {
     public class INDBConnector
     {
-        public static List<TableModel> getInfo(string computerName)
+        public static List<TableModel> GetInfo(string computerName)
         {
-            var connection = tryConnect();
+            if (LookupComputer(computerName) == "Computer not found")
+            {
+                return new List<TableModel> { new TableModel("Not found in purchase database") };
+            }
+
+            var connection = TryConnect();
             if (connection.conn == null)
                 return new List<TableModel>{ new TableModel(connection.error)};
 
@@ -76,7 +79,7 @@ namespace ITSWebMgmt.Connectors
 
         public static string LookupComputer(string computerName)
         {
-            var connection = tryConnect();
+            var connection = TryConnect();
             if (connection.conn == null)
                 return connection.error;
 
@@ -88,8 +91,7 @@ namespace ITSWebMgmt.Connectors
             }
 
             var computerNameDegits = computerName.Substring(3);
-            int val = 0;
-            if (!int.TryParse(computerNameDegits, out val))
+            if (!int.TryParse(computerNameDegits, out _))
             {
                 return "Computer not found";
             }
@@ -123,7 +125,7 @@ namespace ITSWebMgmt.Connectors
             }
         }
 
-        private static (IDbConnection conn, string error) tryConnect()
+        private static (IDbConnection conn, string error) TryConnect()
         {
             string username = Startup.Configuration["cred:indkoeb:username"];
             string password = Startup.Configuration["cred:indkoeb:password"];
@@ -176,9 +178,8 @@ namespace ITSWebMgmt.Connectors
             DirectorySearcher directorySearcher = new DirectorySearcher(directoryEntry, query, new[] { "orclnetdescstring" }, SearchScope.Subtree);
 
             SearchResult searchResult = directorySearcher.FindOne();
-            byte[] value = searchResult.Properties["orclnetdescstring"][0] as byte[];
 
-            if (value != null)
+            if (searchResult.Properties["orclnetdescstring"][0] is byte[] value)
             {
                 string descriptor = Encoding.Default.GetString(value);
                 return descriptor;

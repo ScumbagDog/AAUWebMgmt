@@ -2,18 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 
 namespace ITSWebMgmt.Caches
 {
-    public class ComputerADcache : ADcache
+    public class ComputerADCache : ADCache
     {
         public string ComputerName;
         public bool ComputerFound = false;
         public string Domain;
         public object AdmPwdExpirationTime;
-        public ComputerADcache(string computerName) : base()
+        public ComputerADCache(string computerName) : base()
         {
             ComputerName = computerName;
 
@@ -38,10 +36,10 @@ namespace ITSWebMgmt.Caches
 
             ComputerFound = true;
 
-            adpath = result.Properties["ADsPath"][0].ToString();
-            DE = DirectoryEntryCreator.CreateNewDirectoryEntry(adpath);
+            ADPath = result.Properties["ADsPath"][0].ToString();
+            DE = DirectoryEntryCreator.CreateNewDirectoryEntry(ADPath);
 
-            var PropertyNames = new List<string> { "memberOf", "cn", "ms-Mcs-AdmPwdExpirationTime", "managedBy", "whenCreated" };
+            var PropertyNames = new List<string> { "memberOf", "cn", "ms-Mcs-AdmPwdExpirationTime", "managedBy", "whenCreated", "operatingSystem" };
 
             search = new DirectorySearcher(DE);
             foreach (string p in PropertyNames)
@@ -58,10 +56,11 @@ namespace ITSWebMgmt.Caches
                 new Property("cn", typeof(string)),
                 new Property("memberOf", typeof(string)),
                 new Property("ms-Mcs-AdmPwdExpirationTime", typeof(object)), //System.__ComObject
-                new Property("whenCreated", typeof(object)) //System.__ComObject
+                new Property("whenCreated", typeof(object)), //System.__ComObject
+                new Property("operatingSystem", typeof(string))
             };
 
-            saveCache(properties, null);
+            SaveCache(properties, null);
         }
 
         public void DeleteComputer()

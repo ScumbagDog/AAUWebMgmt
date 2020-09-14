@@ -2,9 +2,7 @@ using ITSWebMgmt.Controllers;
 using ITSWebMgmt.Helpers;
 using ITSWebMgmt.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ITSWebMgmt.WebMgmtErrors
 {
@@ -142,7 +140,7 @@ namespace ITSWebMgmt.WebMgmtErrors
 
         public override bool HaveError()
         {
-            var groups = computer.ComputerModel.Windows.ADcache.getGroups("memberOf");
+            var groups = computer.ComputerModel.Windows.ADCache.GetGroups("memberOf");
             return (!groups.Any(x => x.Contains("cm12_config_AAU10") || x.Contains("cm12_config_Administrativ10"))
                 && computer.ComputerModel.Windows.WhenCreated > DateTime.Parse("2019-01-01"));
         }
@@ -168,11 +166,11 @@ namespace ITSWebMgmt.WebMgmtErrors
         public NotStandardComputerOU(ComputerController computer) : base(computer)
         {
             Heading = "Computer is in a wrong OU";
-            Description = "The computer is getting wroung GPO settings. Fix by using task \"Move computer to OU Clients.\" ";
+            Description = "The computer is getting wrong GPO settings. Fix by using task \"Move computer to OU Clients.\" ";
             Severeness = Severity.Error;
         }
 
-        public override bool HaveError() => !computer.computerIsInRightOU(computer.ComputerModel.Windows.DistinguishedName);
+        public override bool HaveError() => !computer.ComputerIsInRightOU(computer.ComputerModel.Windows.DistinguishedName);
     }
 
     public class PasswordExpired : ComputerWebMgmtError
@@ -214,6 +212,21 @@ namespace ITSWebMgmt.WebMgmtErrors
         public override bool HaveError()
         {
             return computer.ComputerModel.Windows.ConfigPC != "Administrativ10 PC" && computer.ComputerModel.Windows.HasJava();
+        }
+    }
+
+    public class HaveVirus : ComputerWebMgmtError
+    {
+        public HaveVirus(ComputerController computer) : base(computer)
+        {
+            Heading = "Virus found on computer";
+            Description = "A decription on of the virus can be seen in the antivirus tab";
+            Severeness = Severity.Warning;
+        }
+
+        public override bool HaveError()
+        {
+            return computer.ComputerModel.Windows.SCCMAV.ErrorMessage != "Antivirus information not found";
         }
     }
 }
