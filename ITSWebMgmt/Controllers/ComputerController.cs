@@ -74,6 +74,7 @@ namespace ITSWebMgmt.Controllers
                         }
                         catch (Exception e)
                         {
+                            this.HandleError(e);
                             ComputerModel.Windows.ComputerFound = false;
                             ComputerModel.ResultError = "An error uccered while looking up the computer: " + e.Message;
                         }
