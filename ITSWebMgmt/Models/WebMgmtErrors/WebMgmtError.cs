@@ -8,5 +8,6 @@ namespace ITSWebMgmt.WebMgmtErrors
         public string Description { get; set; }
         public abstract bool HaveError();
         public Severity Severeness { get; set; }
+        public string HyperlinkReference { get; set; }
     }
 }

@@ -9,6 +9,10 @@
             <div class="ui @error.Severeness.ToString().ToLower() message" runat="server">
                 <div class="header">@error.Heading</div>
                 <p>@error.Description</p>
+                @if (error.HyperlinkReference.Length != 0)
+                {
+                    <a href="@error.HyperlinkReference">Reference</a>
+                }
             </div>
             <!--Hvis link skal med, skal det enten ligge i WebMgmtError eller også skal vi lave et custom template-->
         }
