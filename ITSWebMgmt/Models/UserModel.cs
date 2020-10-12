@@ -66,7 +66,11 @@ namespace ITSWebMgmt.Models
                     {
                         model = new WindowsComputerModel(model.ComputerName);
                     }
-                    managedComputerList.Add(model);
+
+                    if (model.BaseModel.IsInAD)
+                    {
+                        managedComputerList.Add(model);
+                    }   
                 }
             }
             
