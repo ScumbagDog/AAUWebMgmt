@@ -9,9 +9,12 @@
             <div class="ui @error.Severeness.ToString().ToLower() message" runat="server">
                 <div class="header">@error.Heading</div>
                 <p>@error.Description</p>
-                @if (error.HyperlinkReference.Length != 0)
+                @foreach (var button in error.Buttons)
                 {
-                    <a href="@error.HyperlinkReference">Reference</a>
+                    <button id="" @button.FunctionName"">@button.ButtonDescription</button>
+                    <script>
+                          $("").click(function (){sendPostRequest(""@button.FunctionName"")});
+                    </script>
                 }
             </div>
             <!--Hvis link skal med, skal det enten ligge i WebMgmtError eller også skal vi lave et custom template-->

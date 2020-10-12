@@ -131,24 +131,10 @@ namespace ITSWebMgmt.WebMgmtErrors
         public MissingPCADGroup(ComputerController computer) : base(computer)
         {
             Heading = "The PC is missing in an ad group";
-            Description = @"<p>The computer is neither in the AD group cm12_config_AAU10 or cm12_config_Administrativ10</p>
-                            <p>Please add it to one of them</p>
-                            <button id=""AddToADAdministrativ10"">Add computer to cm12_config_Administrativ10</button>
-                            <br />
-                            <br />
-                            <button id=""AddToADAAU10"">Add computer to cm12_config_AAU10</button>
-                            <script>
-                                $(""#AddToADAdministrativ10"").click(function ()
-                                {
-                                    sendPostRequest(""AddToADAdministrativ10"")
-                                });
-
-                                $(""#AddToADAAU10"").click(function ()
-                                {
-                                    sendPostRequest(""AddToADAAU10"")
-                                });
-                            </script>";
+            Description = "The computer is neither in the AD group cm12_config_AAU10 or cm12_config_Administrativ10, please add it to one of them";
             Severeness = Severity.Error;
+            this.Buttons.Add(new Button("Add computer to cm12_config_AAU10", "AddToADAAU10"));
+            this.Buttons.Add(new Button("Add computer to cm12_config_Administrativ10", "AddToADAdministrativ10"));
         }
 
         public override bool HaveError()
