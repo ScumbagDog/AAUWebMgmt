@@ -53,19 +53,5 @@ namespace ITSWebMgmt.WebMgmtErrors
             }
             return count;
         }
-        
-        /*
-         * Ikke håndteret endnu, derfor ikke slettet.
-            if (error is MissingGroup)
-            {
-                var macError = error as MissingGroup;
-                //TODO handle these errors special
-                return $"<div class=\"ui {messageType} message\" runat= \"server\">" +
-                    $"<div class=\"header\">{macError.Heading}</div>" +
-                    $"<p>{macError.Description}</p><br/>" +
-                    $"<a href=\"{macError.CaseLink}\">Case<a/>" +
-                    $"</div>";
-            }
-            */
     }
 }
