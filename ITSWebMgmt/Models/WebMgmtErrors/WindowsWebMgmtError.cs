@@ -100,24 +100,10 @@ namespace ITSWebMgmt.WebMgmtErrors
         public MissingPCConfig(ComputerController computer) : base(computer)
         {
             Heading = "The PC is missing config";
-            Description = @"<p>The computer is not in the Administrativ10 PC or AAU10 PC group. Plase add it to one of them</p>
-                            <p>It can take over 30 secounds before you get responce, that says if it succesfully was added, please be patient</p>
-                            <button id=""AddToAdministrativ10"">Add computer to Administrativ10 PC</button>
-                            <br />
-                            <br />
-                            <button id=""AddToAAU10"">Add computer to AAU10 PC</button>
-                            <script>
-                                $(""#AddToAdministrativ10"").click(function ()
-                                {
-                                    sendPostRequest(""AddToAdministrativ10"")
-                                });
-
-                                $(""#AddToAAU10"").click(function ()
-                                {
-                                    sendPostRequest(""AddToAAU10"")
-                                });
-                            </script>";
+            Description = "The computer is not in the Administrativ10 PC or AAU10 PC group. Please add it to one of them. It can take over 30 secounds before you get responce, that says if it succesfully was added, please be patient.";
             Severeness = Severity.Error;
+            this.Buttons.Add(new Button("Add computer to AAU10 PC", "AddToAAU10"));
+            this.Buttons.Add(new Button("Add computer to Administrativ10 PC", "AddToAdministrativ10"));
         }
 
         public override bool HaveError()

@@ -11,7 +11,6 @@ namespace ITSWebMgmt.Models
         public string GroupName { get; set; }
         public string CaseLink { get; set; }
         public bool Active { get; set; } = true;
-        new string HyperlinkReference { get { return CaseLink; } }
         public MacWebMgmtError(ComputerController computer)
         {
             this.computer = computer;
